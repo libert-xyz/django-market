@@ -17,4 +17,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    #url(r'^list/$', 'products.views.list', name='list')
+    url(r'^detail/(?P<slug>[\w-]+)/$', 'products.views.detail', name='detail')
 ]
