@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content%}
+
+  {% for obj in product %}
+
+  <li>
+    <ul>{{obj.title}}</ul>
+    <ul>{{obj.description}}</ul>
+    <ul>Price: {{obj.price}}</ul>
+  </li>
+
+    {% empty %}
+    <ul>
+      No Products yet.
+    </ul>
+
+  {% endfor %}
+
+
+{% endblock content%}

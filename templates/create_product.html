@@ -3,12 +3,8 @@
 
 
 {% block content%}
-<form class="" action="" method="post">
 
-  {% csrf_token %}
-  {{form.as_p}}
-  <input type="submit" name="name" value="Create Product">
+{%include 'form_include.html' with form=form submit_btn='Create Product'%}
 
-</form>
 
 {% endblock content%}
