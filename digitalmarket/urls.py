@@ -18,5 +18,9 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     #url(r'^list/$', 'products.views.list', name='list')
-    url(r'^detail/(?P<slug>[\w-]+)/$', 'products.views.detail', name='detail')
+    url(r'^create/$', 'products.views.create_product', name='create_product'),
+    #url(r'^detail/(?P<slug>[\w-]+)/$', 'products.views.detail', name='detail'),
+    url(r'^detail/(?P<object_id>\d+)/$', 'products.views.detail', name='detail'),
+    url(r'^detail/(?P<object_id>\d+)/edit/$', 'products.views.update', name='update'),
+
 ]
