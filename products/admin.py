@@ -3,7 +3,7 @@ from .models import Product
 # Register your models here.
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['__unicode__','price']
+    list_display = ['user','__unicode__','price']
     search_fields = ['title']
     list_filter = ['price']
     class Meta:
