@@ -3,6 +3,8 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.http import Http404
+from digitalmarket.mixins import StaffRequiredMixin, LoginRequiredMixin
+from .mixins import ProductManagerMixin
 from .models import Product
 from .forms import ProductModelForm
 
@@ -50,11 +52,11 @@ def detail_slug(request,slug=None):
     return render(request,template,context)
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(CreateView, LoginRequiredMixin):
     model = Product
     template_name = 'create_product.html'
     form_class = ProductModelForm
-    success_url = '/products/add'
+    #success_url = '/products/add'
 
     def form_valid(self,form):
         user = self.request.user
@@ -62,6 +64,9 @@ class ProductCreateView(CreateView):
         valid_data = super(ProductCreateView, self).form_valid(form)
         form.instance.managers.add(user)
         return valid_data
+
+    # def get_success_url(self):
+    #     return '/users/%s' %(self.request.user)
 
 
 
@@ -83,21 +88,19 @@ def create_product(request):
     template = 'create_product.html'
     return render(request,template,context)
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(ProductManagerMixin, UpdateView, LoginRequiredMixin):
     model = Product
     template_name = 'update.html'
     form_class = ProductModelForm
-    success_url = '/products/'
+    #success_url = '/products/'
 
-    def get_object(self,*args,**kargs):
-        user = self.request.user
-        obj = super(ProductUpdateView, self).get_object(*args,**kargs)
-        if obj.user == user or user in obj.managers.all():
-            return obj
-        else:
-            raise Http404
-
-
+    # def get_object(self,*args,**kargs):
+    #     user = self.request.user
+    #     obj = super(ProductUpdateView, self).get_object(*args,**kargs)
+    #     if obj.user == user or user in obj.managers.all():
+    #         return obj
+    #     else:
+    #         raise Http404
 
 
 def update(request,object_id=None):

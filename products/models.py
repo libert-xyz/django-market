@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db.models.signals import pre_save, post_save
 from django.utils.text import slugify
 
@@ -14,6 +15,11 @@ class Product(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def get_absolute_url(self):
+        view_name = 'products:detail_slug'
+        #return '/products/%s' %(self.slug)
+        return reverse(view_name, kwargs={'slug':self.slug})
 
 def create_slug(instance,new_slug=None):
     slug = slugify(instance.title)
