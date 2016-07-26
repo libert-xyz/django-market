@@ -2,7 +2,15 @@
 
 {% block content%}
 
+<form class="" action="" method="get">
+
+<input type="text" name="q" placeholder="Search">
+<input type="submit" value='Search'>
+
+</form>
+
   {% for obj in object_list %}
+
 
   <li>
     <ul>{{obj.title}}</ul>

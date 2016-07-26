@@ -1,5 +1,7 @@
 import os
+from mimetypes import guess_type
 from django.conf import settings
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.core.servers.basehttp import FileWrapper
 from django.views.generic.list import ListView
@@ -26,7 +28,11 @@ class ProductListView(ListView):
 
     def get_queryset(self, *args,**kwargs):
         qs = super(ProductListView, self).get_queryset(**kwargs)
-        #qs = qs.filter(title__icontains='Fender')
+        query = self.request.GET.get('q')
+        qs = qs.filter(
+            Q(title__icontains=query)|
+            Q(description__icontains=query)
+            ).order_by('-pk')
         print qs
         return qs
 
@@ -44,16 +50,29 @@ class ProductDownloadView(DetailView):
 
     def get(self,request,*args,**kwargs):
         obj = self.get_object()
-        filepath = os.path.join(settings.PROTECTED_ROOT, obj.media.path)
-        #Wrapper big files
-        wrapper = FileWrapper(file(filepath))
-        response = HttpResponse(wrapper, content_type='application/force-download')
-        #Create Headers so the browser can understand
-        response['Content-Disposition'] = 'attachement; filename=%s' %(obj.media.name)
-        response['X-Sendfile'] = str(obj.media.name)
-        #return HttpResponse('%s' %(obj))
-        return response
 
+        try:
+            my_products = request.user.myproducts
+        except:
+            my_products = None
+
+        if my_products and obj in my_products.products.all():
+            filepath = os.path.join(settings.PROTECTED_ROOT, obj.media.path)
+            #Wrapper big files
+            wrapper = FileWrapper(file(filepath))
+            mimetype = 'application/force-download'
+            if guess_type:
+                mimetype = guess_type
+            response = HttpResponse(wrapper, content_type=mimetype)
+
+            if request.GET.get('preview'):
+                #Create Headers so the browser can understand
+                response['Content-Disposition'] = 'attachement; filename=%s' %(obj.media.name)
+            response['X-Sendfile'] = str(obj.media.name)
+            #return HttpResponse('%s' %(obj))
+            return response
+        else:
+            raise Http404
 
 
 def detail(request,object_id=None):

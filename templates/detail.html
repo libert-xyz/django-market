@@ -14,7 +14,7 @@
       Prices: {{product.price}}
     </p>
 
-    {% if product.media %}
+    {% if product.media and request.user.is_authenticated and product in request.user.myproducts.products.all %}
       <p>
         {{product.get_download }}
       </p>

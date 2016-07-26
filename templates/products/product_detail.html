@@ -12,7 +12,7 @@
       Price: {{product.price}}
     </p>
 
-    {% if product.media %}
+    {% if product.media and request.user.is_authenticated and product in request.user.myproducts.products.all %}
       <p>
         <a href="{{product.get_download }}">Download</a>
 
