@@ -101,3 +101,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+
+#team manages
+STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static'),
+        )
+
+ #aws S3 bucket
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_cdn','staticfiles')
+
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_cdn','mediafiles')
+
+
+PROTECTED_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_cdn','protected')

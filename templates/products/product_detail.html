@@ -12,4 +12,11 @@
       Price: {{product.price}}
     </p>
 
+    {% if product.media %}
+      <p>
+        <a href="{{product.get_download }}">Download</a>
+
+      </p>
+    {% endif %}
+
 {% endblock content%}

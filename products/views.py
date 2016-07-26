@@ -1,8 +1,11 @@
+import os
+from django.conf import settings
 from django.shortcuts import render, get_object_or_404
+from django.core.servers.basehttp import FileWrapper
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from digitalmarket.mixins import StaffRequiredMixin, LoginRequiredMixin
 from .mixins import ProductManagerMixin
 from .models import Product
@@ -35,6 +38,22 @@ def list(request):
 
 class ProductDetailView(DetailView):
     model = Product
+
+class ProductDownloadView(DetailView):
+    model = Product
+
+    def get(self,request,*args,**kwargs):
+        obj = self.get_object()
+        filepath = os.path.join(settings.PROTECTED_ROOT, obj.media.path)
+        #Wrapper big files
+        wrapper = FileWrapper(file(filepath))
+        response = HttpResponse(wrapper, content_type='application/force-download')
+        #Create Headers so the browser can understand
+        response['Content-Disposition'] = 'attachement; filename=%s' %(obj.media.name)
+        response['X-Sendfile'] = str(obj.media.name)
+        #return HttpResponse('%s' %(obj))
+        return response
+
 
 
 def detail(request,object_id=None):

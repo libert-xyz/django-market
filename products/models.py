@@ -1,13 +1,22 @@
 from django.db import models
+from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db.models.signals import pre_save, post_save
 from django.utils.text import slugify
 
 
+def download_media_location(instance,filename):
+    return "%s/%s" %(instance.id,filename)
+
+
 class Product(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     managers = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='managers')
+
+    media = models.FileField(blank=True,null=True, upload_to=download_media_location,
+            storage=FileSystemStorage(location=settings.PROTECTED_ROOT))
+
     title = models.CharField(max_length=40)
     price = models.DecimalField(max_digits=7,decimal_places=2,default=0.00) #100.00
     slug = models.SlugField(unique=True)
@@ -20,6 +29,15 @@ class Product(models.Model):
         view_name = 'products:detail_slug'
         #return '/products/%s' %(self.slug)
         return reverse(view_name, kwargs={'slug':self.slug})
+
+    def get_download(self):
+
+        view_name = 'products:download_slug'
+        url = reverse(view_name, kwargs={'slug':self.slug})
+
+        return url
+
+
 
 def create_slug(instance,new_slug=None):
     slug = slugify(instance.title)
