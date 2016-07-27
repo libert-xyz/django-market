@@ -13,8 +13,9 @@
 
 
   <li>
-    <ul>{{obj.title}}</ul>
-    <ul>{{obj.description}}</ul>
+    <a href="{{obj.get_absolute_url}}"><ul>{{obj.title}}</ul>
+</a>
+    <ul>{{obj.description|truncatechars:15}}</ul>
     <ul>Price: {{obj.price}}</ul>
   </li>
 

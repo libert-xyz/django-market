@@ -12,6 +12,13 @@
       Price: {{product.price}}
     </p>
 
+
+    {% for img in product.thumbnail_set.all %}
+
+      <img src="{{ img.media.url }}" />
+
+    {% endfor %}
+
     {% if product.media and request.user.is_authenticated and product in request.user.myproducts.products.all %}
       <p>
         <a href="{{product.get_download }}">Download</a>

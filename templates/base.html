@@ -4,10 +4,20 @@
   <head>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <meta charset="utf-8">
+    <style>
+      .main-content{
+        width: 800px;
+        margin: 0 auto;
+      }
+    </style>
     <title>Market Place</title>
   </head>
   <body>
-    {% block content%}
-    {% endblock content%}
+
+    <div class="main-content">
+      {% block content%}
+      {% endblock content%}
+    </div>
+
   </body>
 </html>
