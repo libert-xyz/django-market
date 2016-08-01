@@ -21,6 +21,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^products/', include('products.urls',namespace='products')),
+    url(r'^tags/', include('tags.urls',namespace='tags')),
+
 
     # url(r'^products/(?P<pk>\d+)/$', ProductDetailView.as_view(), name='product_detail'),
     # url(r'^products/(?P<slug>[\w-]+)/$', ProductDetailView.as_view(), name='product_detail_slug'),
@@ -34,4 +36,3 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    

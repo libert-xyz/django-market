@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content%}
+
+<!--
+
+<form class="" action="" method="get">
+
+<input type="text" name="q" placeholder="Search">
+<input type="submit" value='Search'>
+
+
+</form>
+!-->
+
+  {% for obj in object_list %}
+
+
+  <li>
+    <a href="{{obj.get_absolute_url}}"><ul>{{obj.title}}</ul></a>
+
+  </li>
+
+    {% empty %}
+    <ul>
+      No Tags yet.
+    </ul>
+
+  {% endfor %}
+
+
+{% endblock content%}
