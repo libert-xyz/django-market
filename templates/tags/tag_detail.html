@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load get_thumbnail %}
+{% block content%}
+
+
+  {% for obj in object.products.all %}
+
+
+  <ul>
+      <li>{{obj.title}}</li>
+    <a href="{{obj.get_absolute_url}}">
+
+    <img src="{{obj|get_thumbnail:'sd' }}"/>
+  </a>
+
+  </ul>
+
+  {% endfor %}
+
+
+{% endblock content%}

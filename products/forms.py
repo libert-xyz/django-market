@@ -31,8 +31,7 @@ publish_choices = (
 #             return price
 
 class ProductModelForm(forms.ModelForm):
-
-
+    tags = forms.CharField(label='Related Tags', required=False)
     description = forms.CharField(widget=forms.Textarea(
         attrs={
                 "class":"booklos-class",
