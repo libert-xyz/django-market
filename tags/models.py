@@ -5,9 +5,19 @@ from django.db.models.signals import pre_save, post_save
 from django.utils.text import slugify
 
 
+class TagQuerySet(models.query.QuerySet):
+    def active(self):
+        return self.filter(active=True)
+
 class TagManager(models.Manager):
+
+    def get_queryset(self):
+        return TagQuerySet(self.model, using=self._db)
+
     def all(self,*args,**kwargs):
-        return super(TagManager,self).all(*args,**kwargs).filter(active=True)
+        #return super(TagManager,self).all(*args,**kwargs).filter(active=True)
+        return super(TagManager,self).all(*args,**kwargs).active()
+
 
 
 class Tag(models.Model):

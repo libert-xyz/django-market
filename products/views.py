@@ -13,6 +13,7 @@ from .mixins import ProductManagerMixin
 from .models import Product
 from .forms import ProductModelForm
 from tags.models import Tag
+from analytics.models import TagView
 
 
 class ProductListView(ListView):
@@ -45,6 +46,19 @@ def list(request):
 
 class ProductDetailView(DetailView):
     model = Product
+
+    def get_context_data(self, *args, **kwargs):
+        context =  super(ProductDetailView, self).get_context_data(*args, **kwargs)
+        obj = self.get_object()
+        tags = obj.tag_set.all()
+        for tag in tags:
+            new_view = TagView.objects.add_count(self.request.user, tag)
+            # new_view = TagView.objects.get_or_create(
+            # user = self.request.user,
+            # tag = tag,)[0]
+            # new_view.count += 1
+            # new_view.save()
+        return context
 
 class ProductDownloadView(DetailView):
     model = Product
